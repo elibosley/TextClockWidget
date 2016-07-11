@@ -8,6 +8,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,19 +17,17 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".TextClockWidget">
+        <receiver
+            android:name=".TextClockWidget"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            <intent-filter>
-                <action android:name="com.elijahbosley.textclock.widget.TEXTCLOCK_WIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/text_clock_widget_info" />
+
         </receiver>
 
         <activity android:name=".TextClockWidgetConfigureActivity">
@@ -36,6 +35,14 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".TextClockWidget$UpdateTimeService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.coax.widget.digitalclock.action.UPDATE_TIME"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
