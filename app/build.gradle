@@ -25,5 +25,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.github.LarsWerkman:Lobsterpicker:1.0.1'
     compile 'com.github.QuadFlask:colorpicker:0.0.10'
-    compile 'com.github.MrBIMC:VintageChroma:1.5'
+    compile 'com.github.GrenderG:Color-O-Matic:1.1.3'
 }
