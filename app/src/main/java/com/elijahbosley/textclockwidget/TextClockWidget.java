@@ -13,15 +13,17 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.IBinder;
+import android.support.annotation.ColorInt;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.List;
-
 /**
  * Implementation of App Widget functionality.
  * App Widget Configuration implemented in {@link TextClockWidgetConfigureActivity TextClockWidgetConfigureActivity}
@@ -50,6 +52,9 @@ public class TextClockWidget extends AppWidgetProvider {
         context.startService(new Intent(UpdateTimeService.UPDATE_TIME));
     }
 
+    /**
+     * Service for updating the clock every minute
+     */
     public static final class UpdateTimeService extends Service {
         static final String UPDATE_TIME = "org.coax.widget.digitalclock.action.UPDATE_TIME";
 

@@ -3,16 +3,22 @@ package com.elijahbosley.textclockwidget;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
 
 /**
  * The configuration screen for the {@link TextClockWidget TextClockWidget} AppWidget.
  */
-public class TextClockWidgetConfigureActivity extends Activity {
+public class TextClockWidgetConfigureActivity extends AppCompatActivity {
 
     private static final String PREFS_NAME = "com.elijahbosley.textclockwidget.TextClockWidget";
     private static final String PREF_PREFIX_KEY = "appwidget_";
@@ -59,6 +65,8 @@ public class TextClockWidgetConfigureActivity extends Activity {
         }
     }
 
+
+
     static void deleteTitlePref(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.remove(PREF_PREFIX_KEY + appWidgetId);
@@ -92,6 +100,8 @@ public class TextClockWidgetConfigureActivity extends Activity {
         }
 
         mAppWidgetText.setText(loadTitlePref(TextClockWidgetConfigureActivity.this, mAppWidgetId));
+
+
     }
 }
 

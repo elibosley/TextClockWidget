@@ -14,7 +14,8 @@
         android:background="#09C"
         android:contentDescription="@string/appwidget_text"
         android:text="@string/appwidget_text"
-        android:textColor="#ffffff"
-        android:textSize="24sp"
-        android:textStyle="bold|italic" />
+        android:textColor="@color/text"
+        android:textSize="@string/text_size"
+        android:textStyle="bold|italic"
+        android:fontFamily="sans-serif-thin"/>
 </RelativeLayout>

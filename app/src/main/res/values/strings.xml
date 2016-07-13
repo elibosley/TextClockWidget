@@ -5,4 +5,5 @@
     <string name="add_widget">Add widget</string>
     <string name="time_format">h:mm</string>
     <string name="time_as_text">Twelve Thirty-Three</string>
+    <string name="text_size">24sp</string>
 </resources>

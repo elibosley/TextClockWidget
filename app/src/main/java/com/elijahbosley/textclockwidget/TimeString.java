@@ -20,7 +20,7 @@ public class TimeString {
     }
 
     public String timeAsString() {
-        String timeString = "it is:";
+        String timeString = "";
         timeString += parseHour() + " " + parseMinute();
         return timeString;
     }
