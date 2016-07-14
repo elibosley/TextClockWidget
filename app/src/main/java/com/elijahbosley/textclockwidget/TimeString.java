@@ -37,8 +37,10 @@ public class TimeString {
         int minute = calendar.get(Calendar.MINUTE);
 
         minuteText = numberToText(minute);
-        if (minute <= 9) {
-            minuteText = "/oh " + minuteText;
+        if (minute <= 9 && minute > 0) {
+            minuteText = "" + minuteText;
+        } else if (minute == 0) {
+            minuteText = "";
         }
         return minuteText;
     }

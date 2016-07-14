@@ -1,7 +1,5 @@
 package com.elijahbosley.textclockwidget;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -10,20 +8,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.IBinder;
-import android.support.annotation.ColorInt;
-import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.View;
 import android.widget.RemoteViews;
 
-import java.sql.Time;
 import java.util.Calendar;
-import java.util.List;
+
 /**
  * Implementation of App Widget functionality.
  * App Widget Configuration implemented in {@link TextClockWidgetConfigureActivity TextClockWidgetConfigureActivity}
@@ -34,7 +23,6 @@ public class TextClockWidget extends AppWidgetProvider {
     public void onEnabled(Context context) {
 
         super.onEnabled(context);
-
         context.startService(new Intent(UpdateTimeService.UPDATE_TIME));
     }
 
@@ -57,8 +45,6 @@ public class TextClockWidget extends AppWidgetProvider {
      */
     public static final class UpdateTimeService extends Service {
         static final String UPDATE_TIME = "org.coax.widget.digitalclock.action.UPDATE_TIME";
-
-        private Calendar mCalendar;
         private final static IntentFilter mIntentFilter = new IntentFilter();
 
         static {
@@ -66,6 +52,14 @@ public class TextClockWidget extends AppWidgetProvider {
             mIntentFilter.addAction(Intent.ACTION_TIME_CHANGED);
             mIntentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
         }
+
+        private Calendar mCalendar;
+        private final BroadcastReceiver mTimeChangedReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                updateTime();
+            }
+        };
 
         @Override
         public void onCreate() {
@@ -100,20 +94,12 @@ public class TextClockWidget extends AppWidgetProvider {
             return null;
         }
 
-        private final BroadcastReceiver mTimeChangedReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                updateTime();
-            }
-        };
-
         private void updateTime() {
             mCalendar.setTimeInMillis(System.currentTimeMillis());
             TimeString timeString = new TimeString();
             String time = timeString.timeAsString();
             RemoteViews mRemoteViews = new RemoteViews(getPackageName(), R.layout.text_clock_widget);
             mRemoteViews.setTextViewText(R.id.appwidget_text, time);
-
             ComponentName mComponentName = new ComponentName(this, TextClockWidget.class);
             AppWidgetManager mAppWidgetManager = AppWidgetManager.getInstance(this);
             mAppWidgetManager.updateAppWidget(mComponentName, mRemoteViews);
