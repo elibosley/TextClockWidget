@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.RemoteViews;
 
@@ -18,6 +19,35 @@ import java.util.Calendar;
  * App Widget Configuration implemented in {@link TextClockWidgetConfigureActivity TextClockWidgetConfigureActivity}
  */
 public class TextClockWidget extends AppWidgetProvider {
+
+    public TextClockWidget() {
+
+    }
+
+    @Override
+    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+
+        // See the dimensions and
+        Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
+
+        // Get min width and height.
+        int minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
+        int minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
+        int maxWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH);
+        int maxHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT);
+
+        int textSize = minWidth < minHeight ? minWidth / 4 : minHeight / 4;
+        System.out.println(minWidth + " " + minHeight + " " + maxWidth + " " + maxHeight);
+        System.out.println(textSize);
+
+        RemoteViews views = new RemoteViews(context.getPackageName(),
+                R.layout.text_clock_widget);
+
+        views.setFloat(R.id.appwidget_text, "setTextSize", textSize);
+        ComponentName cn = new ComponentName(context, TextClockWidget.class);
+        appWidgetManager.updateAppWidget(cn, views);
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
+    }
 
     @Override
     public void onEnabled(Context context) {
