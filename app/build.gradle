@@ -23,7 +23,5 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.0.0'
-    compile 'com.github.LarsWerkman:Lobsterpicker:1.0.1'
-    compile 'com.github.QuadFlask:colorpicker:0.0.10'
     compile 'com.github.GrenderG:Color-O-Matic:1.1.3'
 }

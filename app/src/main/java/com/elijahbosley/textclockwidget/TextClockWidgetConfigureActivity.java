@@ -3,22 +3,28 @@ package com.elijahbosley.textclockwidget;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
+import es.dmoral.coloromatic.ColorOMaticDialog;
+import es.dmoral.coloromatic.IndicatorMode;
+import es.dmoral.coloromatic.OnColorSelectedListener;
+import es.dmoral.coloromatic.colormode.ColorMode;
 
 /**
  * The configuration screen for the {@link TextClockWidget TextClockWidget} AppWidget.
  */
 public class TextClockWidgetConfigureActivity extends AppCompatActivity {
+
+    private static final String titlePref = "com.elijahbosley.textclockwidget.TextClockWidget.Title";
+    private static final String backgroundPref = "com.elijahbosley.textclockwidget.TextClockWidget.BackgroundColor";
 
     private static final String PREFS_NAME = "com.elijahbosley.textclockwidget.TextClockWidget";
     private static final String PREF_PREFIX_KEY = "appwidget_";
@@ -30,7 +36,7 @@ public class TextClockWidgetConfigureActivity extends AppCompatActivity {
 
             // When the button is clicked, store the string locally
             String widgetText = mAppWidgetText.getText().toString();
-            saveTitlePref(context, mAppWidgetId, widgetText);
+            savePref(context, mAppWidgetId, widgetText, titlePref);
 
             // It is the responsibility of the configuration activity to update the app widget
 
@@ -47,15 +53,15 @@ public class TextClockWidgetConfigureActivity extends AppCompatActivity {
     }
 
     // Write the prefix to the SharedPreferences object for this widget
-    static void saveTitlePref(Context context, int appWidgetId, String text) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+    static void savePref(Context context, int appWidgetId, String text, String prefs_name) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(prefs_name, 0).edit();
         prefs.putString(PREF_PREFIX_KEY + appWidgetId, text);
         prefs.apply();
     }
 
     // Read the prefix from the SharedPreferences object for this widget.
     // If there is no preference saved, get the default from a resource
-    static String loadTitlePref(Context context, int appWidgetId) {
+    static String loadPref(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
         String titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null);
         if (titleValue != null) {
@@ -64,8 +70,6 @@ public class TextClockWidgetConfigureActivity extends AppCompatActivity {
             return context.getString(R.string.appwidget_text);
         }
     }
-
-
 
     static void deleteTitlePref(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
@@ -99,9 +103,7 @@ public class TextClockWidgetConfigureActivity extends AppCompatActivity {
             return;
         }
 
-        mAppWidgetText.setText(loadTitlePref(TextClockWidgetConfigureActivity.this, mAppWidgetId));
-
-
+        mAppWidgetText.setText(loadPref(TextClockWidgetConfigureActivity.this, mAppWidgetId));
     }
 }
 

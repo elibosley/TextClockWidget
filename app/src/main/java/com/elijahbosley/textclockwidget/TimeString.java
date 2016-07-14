@@ -35,10 +35,11 @@ public class TimeString {
     public String parseMinute() {
         String minuteText = "";
         int minute = calendar.get(Calendar.MINUTE);
-        if (minute <= 9) {
-            minuteText += "oh";
-        }
+
         minuteText = numberToText(minute);
+        if (minute <= 9) {
+            minuteText = "/oh " + minuteText;
+        }
         return minuteText;
     }
 
@@ -49,7 +50,6 @@ public class TimeString {
             }
             else {
                 String textNumber = "";
-                System.out.println(number / 10);
                 switch (number / 10) { // going to be greater than 20
                     case 2:
                         textNumber = textWords[20];
