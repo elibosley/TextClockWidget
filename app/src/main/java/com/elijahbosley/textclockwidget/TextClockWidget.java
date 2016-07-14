@@ -8,8 +8,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
 import java.util.Calendar;
@@ -19,7 +21,7 @@ import java.util.Calendar;
  * App Widget Configuration implemented in {@link TextClockWidgetConfigureActivity TextClockWidgetConfigureActivity}
  */
 public class TextClockWidget extends AppWidgetProvider {
-
+    public static String COM_ELIJAHBOSLEY_TEXTCLOCK_UPDATE = "TEXTCLOCK_UPDATE_STRING";
     public TextClockWidget() {
 
     }
@@ -36,7 +38,7 @@ public class TextClockWidget extends AppWidgetProvider {
         int maxWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH);
         int maxHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT);
 
-        int textSize = minWidth < minHeight ? minWidth / 4 : minHeight / 4;
+        int textSize = minWidth < minHeight ? minWidth / 4 : minHeight / 2;
         System.out.println(minWidth + " " + minHeight + " " + maxWidth + " " + maxHeight);
         System.out.println(textSize);
 
@@ -68,6 +70,32 @@ public class TextClockWidget extends AppWidgetProvider {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
         context.startService(new Intent(UpdateTimeService.UPDATE_TIME));
+    }
+
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+        System.out.println("Received something!");
+        if (COM_ELIJAHBOSLEY_TEXTCLOCK_UPDATE.equals(intent.getAction())) {
+            updateWidget(context);
+            System.out.println("Updated widget!");
+        }
+    }
+
+    private void updateWidget(Context context) {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        RemoteViews views = new RemoteViews(context.getPackageName(),
+                R.layout.text_clock_widget);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int i = prefs.getInt("background_color", 1);
+        System.out.println("i is: " + i);
+        String color = Integer.toHexString(i);
+        views.setInt(R.id.appwidget_text, "setBackgroundColor", i);
+
+        int[] appWidgetIds =
+                appWidgetManager.getAppWidgetIds(new ComponentName(context, this.getClass()));
+        appWidgetManager.updateAppWidget(appWidgetIds, views);
     }
 
     /**
@@ -118,6 +146,7 @@ public class TextClockWidget extends AppWidgetProvider {
 
             return START_STICKY;
         }
+
 
         @Override
         public IBinder onBind(Intent intent) {

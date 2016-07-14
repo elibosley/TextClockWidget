@@ -1,11 +1,13 @@
 package com.elijahbosley.textclockwidget;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.RemoteViews;
 
 import es.dmoral.coloromatic.ColorOMaticDialog;
 import es.dmoral.coloromatic.IndicatorMode;
@@ -13,7 +15,7 @@ import es.dmoral.coloromatic.OnColorSelectedListener;
 import es.dmoral.coloromatic.colormode.ColorMode;
 
 public class MainActivity extends AppCompatActivity {
-
+    private boolean background = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,15 +35,30 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println(background);
                         //savePref(getApplicationContext(), mAppWidgetId, background, Resources.getSystem().getString(R.string.background_color));
 
-                        RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), R.layout.text_clock_widget);
+                        /** RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), R.layout.text_clock_widget);
                         remoteViews.setInt(R.id.appwidget_text, "SetBackgroundColor", i);
                         remoteViews.setTextViewText(R.id.appwidget_text, "TestS");
+                         remoteViews.setFloat(R.id.appwidget_text, "setTextSize", 50); */
 
+
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor settingsEditor = prefs.edit();
+                        settingsEditor.putInt("background_color", i);
+                        settingsEditor.apply();
+
+
+                        Intent updateWidgetIntent = new Intent(getApplicationContext(), TextClockWidget.class);
+                        updateWidgetIntent.setAction(TextClockWidget.COM_ELIJAHBOSLEY_TEXTCLOCK_UPDATE);
+                        getApplicationContext().sendBroadcast(updateWidgetIntent);
                         System.out.println("Set background to " + background);
                     }
                 })
                 .showColorIndicator(true) // Default false, choose to show text indicator showing the current color in HEX or DEC (see images) or not
                 .create()
                 .show(getSupportFragmentManager(), "ColorOMaticDialog");
+    }
+
+    public void toggleBackground(View view) {
+        background = !background;
     }
 }
