@@ -23,23 +23,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showColorSelector(View view) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        // Processing to remove the leading alpha values - ColorOMatic does not support this
+        int i = prefs.getInt("background_color", 1);
+        String hexColor = String.format("#%06X", (0xFFFFFF & i));
+        int colorInt;
+        System.out.println(hexColor);
+        try {
+            colorInt = Color.parseColor(hexColor);
+        } catch (Exception ex) {
+            colorInt = 0;
+        }
         new ColorOMaticDialog.Builder()
-                .initialColor(Color.WHITE)
+                .initialColor(colorInt)
                 .colorMode(ColorMode.ARGB) // RGB, ARGB, HVS
-                .indicatorMode(IndicatorMode.HEX) // HEX or DECIMAL; Note that using HSV with IndicatorMode.HEX is not recommended
+                .indicatorMode(IndicatorMode.DECIMAL) // HEX or DECIMAL; Note that using HSV with IndicatorMode.HEX is not recommended
                 .onColorSelected(new OnColorSelectedListener() {
                     @Override
                     public void onColorSelected(@ColorInt int i) {
                         // do your stuff
                         String background = Integer.toHexString(i);
                         System.out.println(background);
-                        //savePref(getApplicationContext(), mAppWidgetId, background, Resources.getSystem().getString(R.string.background_color));
-
-                        /** RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), R.layout.text_clock_widget);
-                        remoteViews.setInt(R.id.appwidget_text, "SetBackgroundColor", i);
-                        remoteViews.setTextViewText(R.id.appwidget_text, "TestS");
-                         remoteViews.setFloat(R.id.appwidget_text, "setTextSize", 50); */
-
 
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         SharedPreferences.Editor settingsEditor = prefs.edit();

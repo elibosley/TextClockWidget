@@ -3,6 +3,12 @@
     android:layout_height="match_parent"
     android:padding="@dimen/widget_margin">
 
+    <ImageView
+        android:id="@+id/appwidget_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/widget_background" />
+
     <TextView
         android:id="@+id/appwidget_text"
         android:layout_width="wrap_content"
@@ -10,7 +16,6 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_margin="8dp"
-        android:background="#47000000"
         android:contentDescription="@string/appwidget_text"
         android:fontFamily="sans-serif-thin"
         android:text="@string/appwidget_text"

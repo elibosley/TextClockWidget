@@ -1,10 +1,9 @@
 <resources>
     <string name="app_name">Text Clock Widget</string>
-    <string name="appwidget_text">EXAMPLE</string>
+    <string name="appwidget_text">Twelve Thirty-Three</string>
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
     <string name="time_format">h:mm</string>
-    <string name="time_as_text">Twelve Thirty-Three</string>
     <string name="set_color">Set Color</string>
     <string name="background_color">#09C</string>
     <string name="toggle_background">Toggle Background</string>

@@ -89,10 +89,8 @@ public class TextClockWidget extends AppWidgetProvider {
                 R.layout.text_clock_widget);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int i = prefs.getInt("background_color", 1);
-        System.out.println("i is: " + i);
-        String color = Integer.toHexString(i);
-        views.setInt(R.id.appwidget_text, "setBackgroundColor", i);
-
+        views.setInt(R.id.appwidget_background, "setColorFilter", i);
+        views.setFloat(R.id.appwidget_background, "setAlpha", i);
         int[] appWidgetIds =
                 appWidgetManager.getAppWidgetIds(new ComponentName(context, this.getClass()));
         appWidgetManager.updateAppWidget(appWidgetIds, views);
