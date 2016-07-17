@@ -12,22 +12,19 @@
     tools:context="com.elijahbosley.textclockwidget.MainActivity">
 
     <Button
-        android:id="@+id/select_background_color"
+        android:id="@+id/button_background_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="showColorSelector"
-        android:text="@string/set_color" />
+        android:text="@string/pref_title_background_color" />
 
-    <TextView
+    <Button
+        android:id="@+id/button_text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/toggle_background" />
+        android:onClick="showColorSelector"
+        android:text="@string/pref_title_text_color" />
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="toggleBackground" />
 
 
 </LinearLayout>

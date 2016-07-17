@@ -6,5 +6,8 @@
     <string name="time_format">h:mm</string>
     <string name="set_color">Set Color</string>
     <string name="background_color">#09C</string>
-    <string name="toggle_background">Toggle Background</string>
+    <string name="pref_title_background_color">Background Color</string>
+    <string name="pref_summary_background_color">Set Background Color</string>
+    <string name="pref_button_background_color">background_color</string>
+    <string name="pref_title_text_color">Text Color</string>
 </resources>

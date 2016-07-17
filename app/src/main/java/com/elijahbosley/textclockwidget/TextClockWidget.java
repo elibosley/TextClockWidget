@@ -39,8 +39,6 @@ public class TextClockWidget extends AppWidgetProvider {
         int maxHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT);
 
         int textSize = minWidth < minHeight ? minWidth / 4 : minHeight / 2;
-        System.out.println(minWidth + " " + minHeight + " " + maxWidth + " " + maxHeight);
-        System.out.println(textSize);
 
         RemoteViews views = new RemoteViews(context.getPackageName(),
                 R.layout.text_clock_widget);
@@ -76,10 +74,8 @@ public class TextClockWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        System.out.println("Received something!");
         if (COM_ELIJAHBOSLEY_TEXTCLOCK_UPDATE.equals(intent.getAction())) {
             updateWidget(context);
-            System.out.println("Updated widget!");
         }
     }
 
@@ -89,11 +85,12 @@ public class TextClockWidget extends AppWidgetProvider {
                 R.layout.text_clock_widget);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         // Load and set background color preference
-        int i = prefs.getInt("background_color", 1);
-        int a = (i >> 24) & 0xFF;
-        System.out.println(a);
-        views.setInt(R.id.appwidget_background, "setColorFilter", i);
-        views.setInt(R.id.appwidget_background, "setAlpha", a);
+        int bg = prefs.getInt("background_color", 1);
+        int alpha = (bg >> 24) & 0xFF;
+        int tc = prefs.getInt("text_color", 1);
+        views.setInt(R.id.appwidget_background, "setColorFilter", bg);
+        views.setInt(R.id.appwidget_background, "setAlpha", alpha);
+        views.setInt(R.id.appwidget_text, "setTextColor", tc);
 
 
         int[] appWidgetIds =
