@@ -10,4 +10,7 @@
     <string name="pref_summary_background_color">Set Background Color</string>
     <string name="pref_button_background_color">background_color</string>
     <string name="pref_title_text_color">Text Color</string>
+    <string name="pref_title_launch_more_prefs">More Settings</string>
+    <string name="pref_title_caps_mode">All Caps</string>
+    <string name="pref_title_extra_spacing">Extra Spacing</string>
 </resources>

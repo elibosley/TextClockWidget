@@ -61,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
                 .onColorSelected(new OnColorSelectedListener() {
                     @Override
                     public void onColorSelected(@ColorInt int i) {
-                        String background = Integer.toHexString(i);
-
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         SharedPreferences.Editor settingsEditor = prefs.edit();
                         settingsEditor.putInt(preference, i);
@@ -78,12 +76,9 @@ public class MainActivity extends AppCompatActivity {
                 .show(getSupportFragmentManager(), "ColorOMaticDialog");
     }
 
-    public static class TextClockWidgetPreferenceActivity extends PreferenceFragment {
-        @Override
-        public void onCreate(final Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.preferences);
 
-        }
+    public void launchPreferences(View view) {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 }

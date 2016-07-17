@@ -1,5 +1,6 @@
 package com.elijahbosley.textclockwidget;
 
+import android.app.Activity;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -11,7 +12,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.widget.RemoteViews;
 
 import java.util.Calendar;
@@ -22,9 +25,6 @@ import java.util.Calendar;
  */
 public class TextClockWidget extends AppWidgetProvider {
     public static String COM_ELIJAHBOSLEY_TEXTCLOCK_UPDATE = "TEXTCLOCK_UPDATE_STRING";
-    public TextClockWidget() {
-
-    }
 
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
@@ -38,7 +38,7 @@ public class TextClockWidget extends AppWidgetProvider {
         int maxWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH);
         int maxHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT);
 
-        int textSize = minWidth < minHeight ? minWidth / 4 : minHeight / 2;
+        int textSize = minWidth < minHeight ? minWidth / 4 : minHeight / 4;
 
         RemoteViews views = new RemoteViews(context.getPackageName(),
                 R.layout.text_clock_widget);
@@ -80,6 +80,8 @@ public class TextClockWidget extends AppWidgetProvider {
     }
 
     private void updateWidget(Context context) {
+        TimeString timeString = new TimeString();
+        String time = timeString.timeAsString();
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         RemoteViews views = new RemoteViews(context.getPackageName(),
                 R.layout.text_clock_widget);
@@ -88,10 +90,12 @@ public class TextClockWidget extends AppWidgetProvider {
         int bg = prefs.getInt("background_color", 1);
         int alpha = (bg >> 24) & 0xFF;
         int tc = prefs.getInt("text_color", 1);
+        Boolean caps = prefs.getBoolean("caps_mode", false);
         views.setInt(R.id.appwidget_background, "setColorFilter", bg);
         views.setInt(R.id.appwidget_background, "setAlpha", alpha);
         views.setInt(R.id.appwidget_text, "setTextColor", tc);
-
+        time = FormatTextString.formatString(time, context);
+        views.setTextViewText(R.id.appwidget_text, time);
 
         int[] appWidgetIds =
                 appWidgetManager.getAppWidgetIds(new ComponentName(context, this.getClass()));
@@ -147,22 +151,43 @@ public class TextClockWidget extends AppWidgetProvider {
             return START_STICKY;
         }
 
-
         @Override
         public IBinder onBind(Intent intent) {
             return null;
         }
 
         private void updateTime() {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             mCalendar.setTimeInMillis(System.currentTimeMillis());
             TimeString timeString = new TimeString();
             String time = timeString.timeAsString();
+            time = FormatTextString.formatString(time, getApplicationContext());
             RemoteViews mRemoteViews = new RemoteViews(getPackageName(), R.layout.text_clock_widget);
             mRemoteViews.setTextViewText(R.id.appwidget_text, time);
             ComponentName mComponentName = new ComponentName(this, TextClockWidget.class);
             AppWidgetManager mAppWidgetManager = AppWidgetManager.getInstance(this);
             mAppWidgetManager.updateAppWidget(mComponentName, mRemoteViews);
         }
+    }
+
+    public static class FormatTextString extends Activity {
+
+        public static String formatString(String textString, Context context) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean capsMode = prefs.getBoolean("caps_mode", false);
+            boolean extraSpacing = prefs.getBoolean("extra_spaces", false);
+            if (capsMode) {
+                textString = textString.toUpperCase();
+            }
+            if (extraSpacing) {
+                textString = textString.replace("", " ").trim();
+                textString = textString.replace(" \n", "\n");
+                textString = textString.replace("\n ", "\n");
+            }
+            return textString;
+        }
+
+
     }
 
 

@@ -21,7 +21,7 @@ public class TimeString {
 
     public String timeAsString() {
         String timeString = "";
-        timeString += parseHour() + " " + parseMinute();
+        timeString += parseHour() + "" + parseMinute();
         return timeString;
     }
 
@@ -29,14 +29,14 @@ public class TimeString {
         String hourText;
         int hour = calendar.get(Calendar.HOUR);
         hourText = numberToText(hour);
-        return hourText;
+        return hourText + "\n";
     }
 
     public String parseMinute() {
         String minuteText = "";
         int minute = calendar.get(Calendar.MINUTE);
 
-        minuteText = numberToText(minute);
+        minuteText = numberToText(minute) + "\n";
         if (minute <= 9 && minute > 0) {
             minuteText = "" + minuteText;
         } else if (minute == 0) {
@@ -68,7 +68,7 @@ public class TimeString {
                 }
                 int remainder = number % 10;
                 if (remainder != 0) {
-                    textNumber += "-" + textWords[remainder];
+                    textNumber += "\n" + textWords[remainder];
                 }
 
 

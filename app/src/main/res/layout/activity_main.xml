@@ -25,6 +25,12 @@
         android:onClick="showColorSelector"
         android:text="@string/pref_title_text_color" />
 
+    <Button
+        android:id="@+id/button_launch_settings"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/pref_title_launch_more_prefs"
+        android:onClick="launchPreferences"/>
 
 
 </LinearLayout>

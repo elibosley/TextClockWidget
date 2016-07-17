@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference android:title="@string/pref_title_background_color"
-        android:key="@string/pref_button_background_color"
-        android:summary="@string/pref_summary_background_color"/>
+    <SwitchPreference
+        android:title="@string/pref_title_caps_mode"
+        android:key="caps_mode"
+    />
+    <SwitchPreference
+        android:title="@string/pref_title_extra_spacing"
+        android:key="extra_spaces"/>
 </PreferenceScreen>
