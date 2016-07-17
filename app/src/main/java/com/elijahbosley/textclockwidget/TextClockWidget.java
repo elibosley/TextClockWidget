@@ -88,9 +88,14 @@ public class TextClockWidget extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(),
                 R.layout.text_clock_widget);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        // Load and set background color preference
         int i = prefs.getInt("background_color", 1);
+        int a = (i >> 24) & 0xFF;
+        System.out.println(a);
         views.setInt(R.id.appwidget_background, "setColorFilter", i);
-        views.setFloat(R.id.appwidget_background, "setAlpha", i);
+        views.setInt(R.id.appwidget_background, "setAlpha", a);
+
+
         int[] appWidgetIds =
                 appWidgetManager.getAppWidgetIds(new ComponentName(context, this.getClass()));
         appWidgetManager.updateAppWidget(appWidgetIds, views);
