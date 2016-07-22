@@ -34,12 +34,6 @@
 
         </receiver>
 
-        <activity android:name=".TextClockWidgetConfigureActivity">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
-
         <service
             android:name=".TextClockWidget$UpdateTimeService"
             android:exported="true">

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:configure="com.elijahbosley.textclockwidget.TextClockWidgetConfigureActivity"
     android:initialKeyguardLayout="@layout/text_clock_widget"
     android:initialLayout="@layout/text_clock_widget"
     android:minHeight="40dp"
