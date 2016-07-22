@@ -109,6 +109,11 @@ public class TextClockWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
+        int textSize = fontSizeToFit(context, appWidgetManager, appWidgetIds[0]);
+        RemoteViews views = new RemoteViews(context.getPackageName(),
+                R.layout.text_clock_widget);
+        views.setFloat(R.id.appwidget_text, "setTextSize", textSize);
+
         context.startService(new Intent(UpdateTimeService.UPDATE_TIME));
     }
 
