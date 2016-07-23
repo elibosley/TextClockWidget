@@ -37,7 +37,7 @@ public class TimeString {
         int minute = calendar.get(Calendar.MINUTE);
 
         minuteText = numberToText(minute);
-        if ((minute % 10) == 0) {
+        if (minute == 0) {
             minuteText = "";
         }
         return minuteText;

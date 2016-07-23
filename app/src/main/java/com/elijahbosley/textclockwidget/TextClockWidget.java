@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -23,6 +24,7 @@ import java.util.Calendar;
  */
 public class TextClockWidget extends AppWidgetProvider {
     public static String COM_ELIJAHBOSLEY_TEXTCLOCK_UPDATE = "TEXTCLOCK_UPDATE_STRING";
+    public static String currentClockText = "";
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
 
@@ -49,10 +51,10 @@ public class TextClockWidget extends AppWidgetProvider {
         int maxWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH);
         int maxHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT);
         int maxtextLen = (maxWidth / currentTextSize) * (maxHeight / currentTextSize);
-        int currentTextLength = getLongest();
-        currentTextSize = (int) (Math.sqrt((maxWidth * maxHeight) / currentTextLength) / 2.5);
-        //int textSize = minWidth < minHeight ? minWidth / 4 : minHeight / 4;
-
+        //int currentTextLength = getLongest();
+        //currentTextSize = (int) (Math.sqrt((maxWidth * maxHeight) / currentTextLength) / 2.5);
+        //int textSize = minWidth < minHeight ? minWidth / 4 : minHeight / 4
+        currentTextSize = (int) Math.round(calculateTextSize(context, maxWidth));
         SharedPreferences.Editor settingsEditor = sharedPreferences.edit();
         settingsEditor.putInt("text_size", currentTextSize);
         settingsEditor.apply();
@@ -60,9 +62,11 @@ public class TextClockWidget extends AppWidgetProvider {
         return currentTextSize;
     }
 
-    private int getLongest() {
+    private String getLongest(Context context) {
         TimeString timeString = new TimeString();
         String timeAsString = timeString.timeAsString();
+        timeAsString = FormatTextString.formatString(timeAsString, context);
+        System.out.println("current clock text: " + currentClockText);
         int longest = 0;
         int current = 0;
         String currentWord = "";
@@ -75,20 +79,42 @@ public class TextClockWidget extends AppWidgetProvider {
             else {
                 if (current > longest) {
                     longest = current;
+                    System.out.println(currentWord);
                     longestWord = currentWord;
                 }
                 current = 0;
                 currentWord = "";
             }
         }
+        if (current > longest) {
+            longest = current;
+            System.out.println(currentWord);
+            longestWord = currentWord;
+        }
 
+
+        return longestWord;
+    }
+
+    private double calculateTextSize(Context context, float boxWidth) {
+        String longestWord = getLongest(context);
+        int maxFontSize = 200;
         Paint paint = new Paint();
+        paint.setTypeface(Typeface.create("sans-serif-thin", maxFontSize));
+        paint.setTextSize(maxFontSize);
+
         float textWidth = paint.measureText(longestWord);
-        System.out.println("Time as text is " + timeAsString);
+
+        while (textWidth > boxWidth) {
+            maxFontSize -= 2;
+            paint.setTextSize(maxFontSize);
+            textWidth = paint.measureText(longestWord);
+        }
         System.out.println("Textwidth is:" + textWidth + " for word: " + longestWord);
         //TODO use what I just learned about paint.measureText to write a method that gets the longest word and then sees what could fit in one line in textbox
         //System.out.println("longest was:" + longest);
-        return longest;
+        System.out.println("max size found:" + maxFontSize);
+        return maxFontSize * 0.6;
     }
 
     @Override
@@ -228,6 +254,7 @@ public class TextClockWidget extends AppWidgetProvider {
     public static class FormatTextString extends Activity {
 
         public static String formatString(String textString, Context context) {
+
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean capsMode = prefs.getBoolean("caps_mode", false);
             boolean extraSpacing = prefs.getBoolean("extra_spaces", false);
@@ -239,6 +266,7 @@ public class TextClockWidget extends AppWidgetProvider {
                 textString = textString.replace(" \n", "\n");
                 textString = textString.replace("\n ", "\n");
             }
+            TextClockWidget.currentClockText = textString;
             return textString;
         }
 
