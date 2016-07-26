@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -24,7 +26,6 @@ import java.util.Calendar;
  */
 public class TextClockWidget extends AppWidgetProvider {
     public static String COM_ELIJAHBOSLEY_TEXTCLOCK_UPDATE = "TEXTCLOCK_UPDATE_STRING";
-    public static String currentClockText = "";
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
 
@@ -32,7 +33,7 @@ public class TextClockWidget extends AppWidgetProvider {
         int textSize = fontSizeToFit(context, appWidgetManager, appWidgetId);
         RemoteViews views = new RemoteViews(context.getPackageName(),
                 R.layout.text_clock_widget);
-        views.setFloat(R.id.appwidget_text, "setTextSize", textSize);
+        setAppWidgetBackground(context, textSize);
 
         ComponentName cn = new ComponentName(context, TextClockWidget.class);
         appWidgetManager.updateAppWidget(cn, views);
@@ -40,33 +41,28 @@ public class TextClockWidget extends AppWidgetProvider {
     }
 
     private int fontSizeToFit(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
-
-        int currentTextSize = sharedPreferences.getInt("text_size", 20);
-
+        int textSize;
         // Get min width and height.
         int minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
         int minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
         int maxWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH);
         int maxHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT);
-        int maxtextLen = (maxWidth / currentTextSize) * (maxHeight / currentTextSize);
-        //int currentTextLength = getLongest();
-        //currentTextSize = (int) (Math.sqrt((maxWidth * maxHeight) / currentTextLength) / 2.5);
-        //int textSize = minWidth < minHeight ? minWidth / 4 : minHeight / 4
-        currentTextSize = (int) Math.round(calculateTextSize(context, maxWidth));
-        SharedPreferences.Editor settingsEditor = sharedPreferences.edit();
-        settingsEditor.putInt("text_size", currentTextSize);
-        settingsEditor.apply();
+        textSize = (int) Math.round(calculateTextSize(context, maxWidth));
 
-        return currentTextSize;
+        return textSize;
     }
 
+    /**
+     * Get the longest word in the current time and return it given a Context
+     *
+     * @param context the context used to format the text string
+     * @return a string, longest word in the current time
+     */
     private String getLongest(Context context) {
         TimeString timeString = new TimeString();
         String timeAsString = timeString.timeAsString();
         timeAsString = FormatTextString.formatString(timeAsString, context);
-        System.out.println("current clock text: " + currentClockText);
         int longest = 0;
         int current = 0;
         String currentWord = "";
@@ -99,10 +95,10 @@ public class TextClockWidget extends AppWidgetProvider {
     private double calculateTextSize(Context context, float boxWidth) {
         String longestWord = getLongest(context);
         int maxFontSize = 200;
-        Paint paint = new Paint();
-        paint.setTypeface(Typeface.create("sans-serif-thin", maxFontSize));
-        paint.setTextSize(maxFontSize);
 
+        Paint paint = new Paint();
+        paint.setTypeface(Typeface.MONOSPACE); //Todo Move typeface into class-level variable
+        paint.setTextSize(maxFontSize);
         float textWidth = paint.measureText(longestWord);
 
         while (textWidth > boxWidth) {
@@ -111,8 +107,6 @@ public class TextClockWidget extends AppWidgetProvider {
             textWidth = paint.measureText(longestWord);
         }
         System.out.println("Textwidth is:" + textWidth + " for word: " + longestWord);
-        //TODO use what I just learned about paint.measureText to write a method that gets the longest word and then sees what could fit in one line in textbox
-        //System.out.println("longest was:" + longest);
         System.out.println("max size found:" + maxFontSize);
         return maxFontSize * 0.6;
     }
@@ -131,18 +125,15 @@ public class TextClockWidget extends AppWidgetProvider {
         context.stopService(new Intent(context, UpdateTimeService.class));
     }
 
+
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-
         int textSize = fontSizeToFit(context, appWidgetManager, appWidgetIds[0]);
-        RemoteViews views = new RemoteViews(context.getPackageName(),
-                R.layout.text_clock_widget);
-        views.setFloat(R.id.appwidget_text, "setTextSize", textSize);
+        setAppWidgetBackground(context, textSize);
 
         context.startService(new Intent(UpdateTimeService.UPDATE_TIME));
     }
-
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -159,16 +150,19 @@ public class TextClockWidget extends AppWidgetProvider {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                 R.layout.text_clock_widget);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
         // Load and set background color preference
         updateColors(remoteViews, sharedPreferences);
-        Boolean caps = sharedPreferences.getBoolean("caps_mode", false);
         time = FormatTextString.formatString(time, context);
-        remoteViews.setTextViewText(R.id.appwidget_text, time);
-
-
+        //remoteViews.setTextViewText(R.id.appwidget_text, time);
         // Update app widget with newly added changes
         int[] appWidgetIds =
                 appWidgetManager.getAppWidgetIds(new ComponentName(context, this.getClass()));
+
+        int textSize = fontSizeToFit(context, appWidgetManager, appWidgetIds[0]);
+        System.out.println("Called setAppWidgetBackground");
+        setAppWidgetBackground(context, textSize);
+
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
     }
 
@@ -177,17 +171,36 @@ public class TextClockWidget extends AppWidgetProvider {
         int bg = sharedPreferences.getInt("background_color", 1);
         int alpha = (bg >> 24) & 0xFF;
         int tc = sharedPreferences.getInt("text_color", 1);
-
         remoteViews.setInt(R.id.appwidget_background, "setColorFilter", bg);
         remoteViews.setInt(R.id.appwidget_background, "setAlpha", alpha);
         remoteViews.setInt(R.id.appwidget_text, "setTextColor", tc);
     }
 
     /**
+     * Function to generate and set the background of the appWidget
+     *
+     * @param context  the context
+     * @param textSize the size of the text to use
+     */
+    private void setAppWidgetBackground(Context context, int textSize) {
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+                R.layout.text_clock_widget);
+
+        Typeface robotoMonoThin = Typeface.createFromAsset(context.getAssets(), "fonts/RobotoMono-Thin.ttf");
+        robotoMonoThin = Typeface.MONOSPACE;
+        TimeString timeString = new TimeString();
+        String time = timeString.timeAsString();
+        time = FormatTextString.formatString(time, context);
+        System.out.println("Called getFontBitmap with" + textSize + "and" + time);
+        Bitmap textBitmap = BitmapCreator.getFontBitmap(context, time, Color.WHITE, textSize, 1);
+        remoteViews.setImageViewBitmap(R.id.appwidget_imageview, textBitmap);
+    }
+
+    /**
      * Service for updating the clock every minute
      */
     public static final class UpdateTimeService extends Service {
-        static final String UPDATE_TIME = "org.coax.widget.digitalclock.action.UPDATE_TIME";
+        static final String UPDATE_TIME = "com.elijahbosley.widget.textclock.action.UPDATE_TIME";
         private final static IntentFilter mIntentFilter = new IntentFilter();
 
         static {
@@ -244,7 +257,14 @@ public class TextClockWidget extends AppWidgetProvider {
             String time = timeString.timeAsString();
             time = FormatTextString.formatString(time, getApplicationContext());
             RemoteViews mRemoteViews = new RemoteViews(getPackageName(), R.layout.text_clock_widget);
-            mRemoteViews.setTextViewText(R.id.appwidget_text, time);
+
+            System.out.println("Called setAppWidgetBackground");
+
+            Bitmap textBitmap = BitmapCreator.getFontBitmap(getApplicationContext(), time, Color.WHITE, 50, 1);
+            System.out.println(textBitmap);
+            mRemoteViews.setImageViewBitmap(R.id.appwidget_imageview, textBitmap);
+
+
             ComponentName mComponentName = new ComponentName(this, TextClockWidget.class);
             AppWidgetManager mAppWidgetManager = AppWidgetManager.getInstance(this);
             mAppWidgetManager.updateAppWidget(mComponentName, mRemoteViews);
@@ -266,7 +286,6 @@ public class TextClockWidget extends AppWidgetProvider {
                 textString = textString.replace(" \n", "\n");
                 textString = textString.replace("\n ", "\n");
             }
-            TextClockWidget.currentClockText = textString;
             return textString;
         }
 

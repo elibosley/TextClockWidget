@@ -38,7 +38,7 @@
             android:name=".TextClockWidget$UpdateTimeService"
             android:exported="true">
             <intent-filter>
-                <action android:name="org.coax.widget.digitalclock.action.UPDATE_TIME"/>
+                <action android:name="com.elijahbosley.widget.textclock.action.UPDATE_TIME" />
             </intent-filter>
         </service>
     </application>
