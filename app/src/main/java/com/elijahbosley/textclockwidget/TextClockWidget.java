@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -50,11 +51,10 @@ public class TextClockWidget extends AppWidgetProvider {
         int minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
         int maxWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH);
         int maxHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT);
-        int maxtextLen = (maxWidth / currentTextSize) * (maxHeight / currentTextSize);
         //int currentTextLength = getLongest();
         //currentTextSize = (int) (Math.sqrt((maxWidth * maxHeight) / currentTextLength) / 2.5);
         //int textSize = minWidth < minHeight ? minWidth / 4 : minHeight / 4
-        currentTextSize = (int) Math.round(calculateTextSize(context, maxWidth));
+        currentTextSize = (int) Math.round(calculateTextSize(context, maxWidth, maxHeight));
         SharedPreferences.Editor settingsEditor = sharedPreferences.edit();
         settingsEditor.putInt("text_size", currentTextSize);
         settingsEditor.apply();
@@ -63,10 +63,7 @@ public class TextClockWidget extends AppWidgetProvider {
     }
 
     private String getLongest(Context context) {
-        TimeString timeString = new TimeString();
-        String timeAsString = timeString.timeAsString();
-        timeAsString = FormatTextString.formatString(timeAsString, context);
-        System.out.println("current clock text: " + currentClockText);
+        String timeAsString = getTimeString(context);
         int longest = 0;
         int current = 0;
         String currentWord = "";
@@ -79,7 +76,6 @@ public class TextClockWidget extends AppWidgetProvider {
             else {
                 if (current > longest) {
                     longest = current;
-                    System.out.println(currentWord);
                     longestWord = currentWord;
                 }
                 current = 0;
@@ -88,7 +84,6 @@ public class TextClockWidget extends AppWidgetProvider {
         }
         if (current > longest) {
             longest = current;
-            System.out.println(currentWord);
             longestWord = currentWord;
         }
 
@@ -96,24 +91,38 @@ public class TextClockWidget extends AppWidgetProvider {
         return longestWord;
     }
 
-    private double calculateTextSize(Context context, float boxWidth) {
+    private String getTimeString(Context context) {
+        TimeString timeString = new TimeString();
+        String timeAsString = timeString.timeAsString();
+        return FormatTextString.formatString(timeAsString, context);
+    }
+
+    private double calculateTextSize(Context context, float boxWidth, float boxHeight) {
         String longestWord = getLongest(context);
         int maxFontSize = 200;
         Paint paint = new Paint();
         paint.setTypeface(Typeface.create("sans-serif-thin", maxFontSize));
         paint.setTextSize(maxFontSize);
-
-        float textWidth = paint.measureText(longestWord);
-
+        /** Calculate the height and width of the text */
+        Rect bounds = new Rect();
+        paint.getTextBounds(longestWord, 0, longestWord.length() - 1,  bounds);
+        float textHeight = bounds.height();
+        float textWidth = bounds.width();
+        /** Resize text to fit within the box horizontally */
         while (textWidth > boxWidth) {
             maxFontSize -= 2;
             paint.setTextSize(maxFontSize);
-            textWidth = paint.measureText(longestWord);
+            paint.getTextBounds(longestWord, 0, longestWord.length() - 1, bounds);
+            textWidth = bounds.width();
         }
-        System.out.println("Textwidth is:" + textWidth + " for word: " + longestWord);
-        //TODO use what I just learned about paint.measureText to write a method that gets the longest word and then sees what could fit in one line in textbox
-        //System.out.println("longest was:" + longest);
-        System.out.println("max size found:" + maxFontSize);
+        while (textHeight > boxHeight) {
+            System.out.println("text height:" + textHeight + "box height:" + boxHeight);
+            maxFontSize -= 2;
+            paint.setTextSize(maxFontSize);
+            paint.getTextBounds(longestWord, 0, longestWord.length() - 1, bounds);
+            textHeight = bounds.height();
+        }
+        System.out.println("max font size set to:" + maxFontSize);
         return maxFontSize * 0.6;
     }
 
