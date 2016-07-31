@@ -260,7 +260,6 @@ public class TextClockWidget extends AppWidgetProvider {
             RemoteViews mRemoteViews = new RemoteViews(getPackageName(), R.layout.text_clock_widget);
 
             System.out.println("Called setAppWidgetBackground");
-
             Bitmap textBitmap = BitmapCreator.getFontBitmap(getApplicationContext(), time, Color.WHITE, 50, 1);
             System.out.println(textBitmap);
             mRemoteViews.setImageViewBitmap(R.id.appwidget_imageview, textBitmap);
