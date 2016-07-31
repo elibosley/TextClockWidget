@@ -1,8 +1,11 @@
 package com.elijahbosley.textclockwidget;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Method to get the time and convert it into text
@@ -42,6 +45,28 @@ public class TimeString {
         }
         return minuteText;
     }
+
+    public List<String> parseMinutesToArray() {
+        String minute = parseMinute();
+        List<String> minutes = new ArrayList<>();
+        minutes.addAll(Arrays.asList(minute.split("\\n")));
+        if (minutes.size() > 1) {
+            return minutes;
+        } else {
+            minutes.add(" ");
+            return minutes;
+        }
+    }
+
+    public String[] getTimeArray() {
+        List<String> minutes = parseMinutesToArray();
+
+        String lineOne = parseHour();
+        String lineTwo = minutes.get(0);
+        String lineThree = minutes.get(1);
+        return new String[]{lineOne, lineTwo, lineThree};
+    }
+
 
     public String numberToText(int number) {
         if (number >= 0 && number <= 60) {

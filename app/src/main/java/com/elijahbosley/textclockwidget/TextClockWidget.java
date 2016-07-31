@@ -92,6 +92,7 @@ public class TextClockWidget extends AppWidgetProvider {
         return longestWord;
     }
 
+
     private double calculateTextSize(Context context, float boxWidth) {
         String longestWord = getLongest(context);
         int maxFontSize = 200;
@@ -161,6 +162,7 @@ public class TextClockWidget extends AppWidgetProvider {
 
         int textSize = fontSizeToFit(context, appWidgetManager, appWidgetIds[0]);
         System.out.println("Called setAppWidgetBackground");
+
         setAppWidgetBackground(context, textSize);
 
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
@@ -183,16 +185,15 @@ public class TextClockWidget extends AppWidgetProvider {
      * @param textSize the size of the text to use
      */
     private void setAppWidgetBackground(Context context, int textSize) {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int textColor = prefs.getInt("text_color", Color.WHITE);
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                 R.layout.text_clock_widget);
-
-        Typeface robotoMonoThin = Typeface.createFromAsset(context.getAssets(), "fonts/RobotoMono-Thin.ttf");
-        robotoMonoThin = Typeface.MONOSPACE;
         TimeString timeString = new TimeString();
-        String time = timeString.timeAsString();
-        time = FormatTextString.formatString(time, context);
-        System.out.println("Called getFontBitmap with" + textSize + "and" + time);
-        Bitmap textBitmap = BitmapCreator.getFontBitmap(context, time, Color.WHITE, textSize, 1);
+        String[] time = timeString.getTimeArray();
+        time = FormatTextString.formatStringArray(time, context);
+        Bitmap textBitmap = BitmapCreator.getFontBitmap(context, time, textColor, textSize, 1);
         remoteViews.setImageViewBitmap(R.id.appwidget_imageview, textBitmap);
     }
 
@@ -254,8 +255,8 @@ public class TextClockWidget extends AppWidgetProvider {
 
             mCalendar.setTimeInMillis(System.currentTimeMillis());
             TimeString timeString = new TimeString();
-            String time = timeString.timeAsString();
-            time = FormatTextString.formatString(time, getApplicationContext());
+            String[] time = timeString.getTimeArray();
+            time = FormatTextString.formatStringArray(time, getApplicationContext());
             RemoteViews mRemoteViews = new RemoteViews(getPackageName(), R.layout.text_clock_widget);
 
             System.out.println("Called setAppWidgetBackground");
@@ -287,6 +288,13 @@ public class TextClockWidget extends AppWidgetProvider {
                 textString = textString.replace("\n ", "\n");
             }
             return textString;
+        }
+
+        public static String[] formatStringArray(String[] timeArray, Context context) {
+            for (int i = 0; i < timeArray.length; i++) {
+                timeArray[i] = formatString(timeArray[i], context);
+            }
+            return timeArray;
         }
 
 
