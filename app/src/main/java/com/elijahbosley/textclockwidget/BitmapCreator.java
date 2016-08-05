@@ -43,7 +43,7 @@ public class BitmapCreator {
         Bitmap bitmap = Bitmap.createBitmap(textWidth, height * 3, Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(bitmap);
         float xOriginal = pad;
-        canvas.drawText(lines[0], xOriginal + paint.measureText(lines[0]) / 2, fontSizePX + pad, paint);
+        canvas.drawText(lines[0], xOriginal + paint.measureText(lines[0]) / 2, fontSizePX, paint);
         canvas.drawText(lines[1], xOriginal + paint.measureText(lines[1]) / 2, fontSizePX * 2 + pad, paint);
         canvas.drawText(lines[2], xOriginal + paint.measureText(lines[2]) / 2, fontSizePX * 3 + pad, paint);
         return bitmap;
