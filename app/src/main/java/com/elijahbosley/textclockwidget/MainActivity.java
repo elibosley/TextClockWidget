@@ -1,11 +1,9 @@
 package com.elijahbosley.textclockwidget;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +15,7 @@ import es.dmoral.coloromatic.OnColorSelectedListener;
 import es.dmoral.coloromatic.colormode.ColorMode;
 
 public class MainActivity extends AppCompatActivity {
+    public final String COM_ELIJAHBOSLEY_TEXTCLOCK_FONT_COLOR = "TEXTCLOCK_FONTCOLOR_STRING";
     private boolean background = false;
 
     @Override

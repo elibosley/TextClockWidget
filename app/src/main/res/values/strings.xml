@@ -14,6 +14,7 @@
     <string name="pref_title_caps_mode">All Caps</string>
     <string name="pref_title_extra_spacing">Extra Spacing</string>
     <string name="font_family">monospace</string>
+    <string name="app_info">Before changing these settings, add the widget to your homescreen. Thanks for trying out my application!</string>
 
     <string-array name="font_preference_names">
         <item name="robotomono_light_name">RobotoMono-Light</item>

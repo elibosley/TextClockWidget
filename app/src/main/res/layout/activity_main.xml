@@ -11,10 +11,16 @@
 
     tools:context="com.elijahbosley.textclockwidget.MainActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_info" />
+
     <Button
         android:id="@+id/button_background_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:onClick="showColorSelector"
         android:text="@string/pref_title_background_color" />
 
@@ -27,10 +33,10 @@
 
     <Button
         android:id="@+id/button_launch_settings"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="@string/pref_title_launch_more_prefs"
-        android:onClick="launchPreferences"/>
+        android:layout_height="wrap_content"
+        android:onClick="launchPreferences"
+        android:text="@string/pref_title_launch_more_prefs" />
 
 
 </LinearLayout>
