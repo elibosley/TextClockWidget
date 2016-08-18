@@ -14,4 +14,18 @@
     <string name="pref_title_caps_mode">All Caps</string>
     <string name="pref_title_extra_spacing">Extra Spacing</string>
     <string name="font_family">monospace</string>
+
+    <string-array name="font_preference_names">
+        <item name="robotomono_light_name">RobotoMono-Light</item>
+        <item name="roboto_light_name">Roboto-Light</item>
+    </string-array>
+
+    <string-array name="font_preference_values">
+    <item name="robotomono_light_value">0</item>
+    <item name="roboto_light_value">1</item>
+    </string-array>
+
+    <string-array name="font_preference_default">
+        <item name="robotomono_light_value">0</item>
+    </string-array>
 </resources>

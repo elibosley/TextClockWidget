@@ -6,16 +6,12 @@
 
     <ImageView
         android:id="@+id/appwidget_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/widget_background" />
 
     <ImageView
         android:id="@+id/appwidget_imageview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:adjustViewBounds="true"
-        android:gravity="center"
-        android:scaleType="centerInside" />
+        android:layout_height="wrap_content"/>
 </RelativeLayout>

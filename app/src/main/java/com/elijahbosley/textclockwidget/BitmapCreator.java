@@ -19,10 +19,10 @@ public class BitmapCreator {
         Typeface typeface = Typeface.DEFAULT;
         switch (typeFaceSelection) {
             case 0:
-                typeface = Typeface.createFromAsset(context.getAssets(), "fonts/RobotoMono-Regular.ttf");
+                typeface = Typeface.createFromAsset(context.getAssets(), "fonts/RobotoMono-Thin.ttf");
                 break;
             case 1:
-                typeface = Typeface.createFromAsset(context.getAssets(), "fonts/RobotoMono-Thin.ttf");
+                typeface = Typeface.create("sans-serif-light", Typeface.NORMAL);
                 break;
         }
         String longest = "";
@@ -40,6 +40,7 @@ public class BitmapCreator {
         paint.setTextAlign(Paint.Align.CENTER);
         int textWidth = (int) (paint.measureText(longest) + pad * 2);
         int height = (int) (fontSizePX / 0.75);
+        //todo width and height 0 issue
         Bitmap bitmap = Bitmap.createBitmap(textWidth, height * 3, Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(bitmap);
         float xOriginal = pad;

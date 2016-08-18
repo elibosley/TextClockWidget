@@ -2,9 +2,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <SwitchPreference
         android:title="@string/pref_title_caps_mode"
-        android:key="caps_mode"
-    />
+        android:key="caps_mode"/>
     <SwitchPreference
         android:title="@string/pref_title_extra_spacing"
         android:key="extra_spaces"/>
+    <ListPreference
+        android:title="Font"
+        android:entries="@array/font_preference_names"
+        android:entryValues="@array/font_preference_values"
+        android:defaultValue="0"
+        android:key="font_identifier"/>
 </PreferenceScreen>
