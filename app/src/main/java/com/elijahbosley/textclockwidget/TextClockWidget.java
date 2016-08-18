@@ -76,8 +76,6 @@ public class TextClockWidget extends AppWidgetProvider {
             paint.setTextSize(maxFontSize);
             textWidth = paint.measureText(longestWord);
         }
-        System.out.println("Textwidth is:" + textWidth + " for word: " + longestWord);
-        System.out.println("max size found:" + maxFontSize);
         return maxFontSize * 0.6;
     }
 
@@ -103,7 +101,6 @@ public class TextClockWidget extends AppWidgetProvider {
             else {
                 if (current > longest) {
                     longest = current;
-                    System.out.println(currentWord);
                     longestWord = currentWord;
                 }
                 current = 0;
@@ -112,7 +109,6 @@ public class TextClockWidget extends AppWidgetProvider {
         }
         if (current > longest) {
             longest = current;
-            System.out.println(currentWord);
             longestWord = currentWord;
         }
         return longestWord;
@@ -132,7 +128,6 @@ public class TextClockWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        System.out.println("called onUpdate");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         updateWidget(context);
 
@@ -143,8 +138,6 @@ public class TextClockWidget extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         if (COM_ELIJAHBOSLEY_TEXTCLOCK_UPDATE.equals(intent.getAction())) {
-
-            System.out.println("received update intent");
             updateWidget(context);
         }
     }
@@ -171,7 +164,6 @@ public class TextClockWidget extends AppWidgetProvider {
         RemoteViews mRemoteViews = new RemoteViews(context.getPackageName(), R.layout.text_clock_widget);
 
         Bitmap textBitmap = BitmapCreator.getFontBitmap(context, time, textColor, textSize, textSelection);
-        System.out.println(textBitmap);
         mRemoteViews.setImageViewBitmap(R.id.appwidget_imageview, textBitmap);
 
 
@@ -184,7 +176,6 @@ public class TextClockWidget extends AppWidgetProvider {
     private void updateColors(RemoteViews remoteViews, SharedPreferences sharedPreferences) {
 
         int bg = sharedPreferences.getInt("background_color", 1);
-        System.out.println(bg);
         int alpha = (bg >> 24) & 0xFF;
         int tc = sharedPreferences.getInt("text_color", 1);
         remoteViews.setInt(R.id.appwidget_background, "setColorFilter", bg);
@@ -245,10 +236,8 @@ public class TextClockWidget extends AppWidgetProvider {
         }
 
         private void updateTime() {
-            System.out.println("called updateTime");
             SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             int textColor = sharedPrefs.getInt("text_color", Color.WHITE);
-            System.out.println(sharedPrefs.getString("font_identifier", "0"));
             int textSelection = Integer.parseInt(sharedPrefs.getString("font_identifier", "0"));
 
 
@@ -260,7 +249,6 @@ public class TextClockWidget extends AppWidgetProvider {
 
             // Create bitmap
             Bitmap textBitmap = BitmapCreator.getFontBitmap(getApplicationContext(), time, textColor, 50, textSelection);
-            System.out.println(textBitmap);
             mRemoteViews.setImageViewBitmap(R.id.appwidget_imageview, textBitmap);
 
             // Apply changes

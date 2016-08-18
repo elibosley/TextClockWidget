@@ -18,7 +18,6 @@ public class SettingsActivity extends AppCompatActivity {
         try {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }catch (NullPointerException ex) {
-            System.out.println("no home");
         }
 
 
@@ -40,7 +39,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            System.out.println("key was: " + key);
             if (key.equals("extra_spaces") || key.equals("caps_mode")) {
                 Intent updateWidgetIntent = new Intent(getActivity().getApplicationContext(), TextClockWidget.class);
                 updateWidgetIntent.setAction(TextClockWidget.COM_ELIJAHBOSLEY_TEXTCLOCK_UPDATE);
