@@ -16,7 +16,7 @@ public class TimeString {
     private String[] textWords; // idea borrowed from http://www.guideforschool.com/553891-program-to-print-a-given-time-in-words-isc-practical-2003/
 
     public TimeString() {
-        textWords = new String[]{"Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight",
+        textWords = new String[]{"Twelve", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight",
                 "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
                 "Seventeen", "Eighteen", "Nineteen", "Twenty", "Thirty", "Forty", "Fifty"};
         calendar = new GregorianCalendar();
