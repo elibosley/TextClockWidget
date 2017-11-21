@@ -1,11 +1,9 @@
 package com.elijahbosley.textclockwidget;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getFragmentManager().beginTransaction().replace(android.R.id.content, new TextClockWidgetPreferenceActivity()).commit();
         setContentView(R.layout.activity_main);
     }
 

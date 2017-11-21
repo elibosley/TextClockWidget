@@ -44,7 +44,7 @@ public class TextClockWidget extends AppWidgetProvider {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
 
-        int currentTextSize = sharedPreferences.getInt("text_size", 20);
+        int currentTextSize;
 
         // Get min width and height.
         int minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
