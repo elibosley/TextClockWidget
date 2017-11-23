@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getFragmentManager().beginTransaction().replace(android.R.id.content, new TextClockWidgetPreferenceActivity()).commit();
         setContentView(R.layout.activity_main);
     }
 
