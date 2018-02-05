@@ -4,6 +4,7 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -19,6 +20,7 @@
         <activity android:name=".SettingsActivity"
             android:parentActivityName=".MainActivity">
         </activity>
+        <activity android:name=".TextClockWidget$FormatTextString" />
 
         <receiver
             android:name=".TextClockWidget"
@@ -32,7 +34,7 @@
         </receiver>
 
         <service
-            android:name=".TextClockWidget$UpdateTimeService"
+            android:name=".UpdateTimeService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.elijahbosley.widget.textclock.action.UPDATE_TIME" />

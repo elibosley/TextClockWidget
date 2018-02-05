@@ -20,7 +20,7 @@
         android:id="@+id/button_background_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:enabled="false"
+        android:enabled="true"
         android:onClick="showColorSelector"
         android:text="@string/pref_title_background_color" />
 

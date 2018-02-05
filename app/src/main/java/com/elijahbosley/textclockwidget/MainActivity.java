@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import es.dmoral.coloromatic.ColorOMaticDialog;
@@ -15,8 +16,6 @@ import es.dmoral.coloromatic.OnColorSelectedListener;
 import es.dmoral.coloromatic.colormode.ColorMode;
 
 public class MainActivity extends AppCompatActivity {
-    public final String COM_ELIJAHBOSLEY_TEXTCLOCK_FONT_COLOR = "TEXTCLOCK_FONTCOLOR_STRING";
-    private boolean background = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         int i = prefs.getInt(preference, 1);
         String hexColor = String.format("#%06X", (0xFFFFFF & i));
         int colorInt;
+        Log.d("HexColor", hexColor);
         try {
             colorInt = Color.parseColor(hexColor);
         } catch (Exception ex) {
